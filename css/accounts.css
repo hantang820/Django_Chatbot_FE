@@ -17,8 +17,8 @@
     margin-bottom: 5px;
     font-size: small;
     color: rgb(153, 152, 152);
-    text-align: left; /* 라벨을 왼쪽 정렬로 변경 */
-    margin-left: 5px; /* 좌측 마진 */
+    text-align: left; 
+    margin-left: 5px; 
 }
 
 .form-group input {

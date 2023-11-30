@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/common.css" />
     <link rel="stylesheet" href="./css/chat.css" />
-    <title>Login</title>
+    <title>Chat</title>
 </head>
 
 <body>
@@ -21,28 +21,89 @@
     </div>
 
     <div class="chat-container">
-        <!-- 채팅 -->
         <div class="chat-screen" id="chat-screen">
-            <p class="chat-info">ChatGPT에게 질문을 해보세요!</p>
-            <div class="ai-chat" id="ai-chat">
-                <div class="chat-wrap">
-                    <div class="chat-content">
-                        <p>반갑습니다. 어떤 것을 도와드릴까요?</p>
-                    </div>
-                </div>
-                
+            <p class="chat-info">ChatGPT에게 질문을 해보세요</p>
+            <hr>
+            <div class="chat-wrapper" id="chat-wrapper">
             </div>
-                <form class="chat-form" id="chatbot_form">
-                        <textarea name="chat-input" id="chat-input" placeholder="개발자 이력서에 들어갈 자기소개서를 500자 내외로 작성해줘."></textarea>
-                        <button class="chat-input-button" type="submit" >전송</button>
-                </form>
         </div>
+        <form class="chat-form" id="chatbot_form">
+            <textarea name="chat-input" id="chat-input"></textarea>
+            <button class="chat-input-button" type="submit">전송</button>
+        </form>
     </div>
 
-
     <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const url = "http://127.0.0.1:8000/chat/";
+            const access_token = localStorage.getItem('access_token');
+            const form = document.getElementById("chatbot_form");
+            const input = document.getElementById("chat-input");
+            const chatWrapper = document.querySelector(".chat-wrapper");
+        
+            if (!access_token) {
+                alert('로그인 후 사용해주세요.');
+                location.href="./login.html";
+            }
+        
+            const sendQuestion = (question) => {
+                return question ? { prompt: question } : undefined;
+            };
+        
+            const printMessage = (text, className) => {
+                const message = document.createElement("div");
+                message.classList.add("chat", className);
+        
+                const messageContainer = document.createElement("div");
+                messageContainer.classList.add("chat-wrap");
+        
+                const messageText = document.createElement("div");
+                messageText.classList.add("chat-content");
+                messageText.textContent = text;
+        
+                messageContainer.appendChild(messageText);
+                message.appendChild(messageContainer);
+                chatWrapper.appendChild(message);
+            };
+        
+            const apiPost = async (data) => {
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            'Authorization' : `Bearer ${access_token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                        redirect: "follow",
+                    });
+        
+                    const result = await response.json();
+                    printMessage(result.response, "ai-chat");
+                } catch (err) {
+                    alert('서버에 요청을 보내는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
+                    console.log(err);
+                }
+            };
+        
+            input.addEventListener("input", (e) => {
+                question = e.target.value;
+            });
+        
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const question = input.value;
+                if (!question) return;
+                input.value = null;
+        
+                printMessage(question, "user-chat");
+                apiPost(sendQuestion(question));
+            });
+        
+            printMessage('무엇을 도와드릴까요?', 'ai-chat');
+        });
 
-    const logout = document.querySelector('#logout-btn');
+        const logout = document.querySelector('#logout-btn');
         logout.addEventListener('click', async function() {
             localStorage.removeItem("access_token");
             localStorage.removeItem("refresh_token");
@@ -51,4 +112,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
