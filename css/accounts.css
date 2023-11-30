@@ -1,0 +1,43 @@
+.container {
+    max-width: 400px;
+    margin: 100px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-size: small;
+    color: rgb(153, 152, 152);
+    text-align: left; /* 라벨을 왼쪽 정렬로 변경 */
+    margin-left: 5px; /* 좌측 마진 */
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    background-color: #aad0a5;
+    color: white;
+    padding: 15px 15px;
+    margin: 5px 0px 20px 0px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #d7e7d5;
+}

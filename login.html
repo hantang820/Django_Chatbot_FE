@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/common.css" />
+    <link rel="stylesheet" href="./css/accounts.css" />
     <title>Login</title>
 </head>
 
@@ -15,6 +16,7 @@
             <a class="chat-btn" href="chat.html">Chat</a>
             <a class="login-btn" href="login.html">Login</a>
             <a class="signup-btn" href="signup.html">Sign Up</a>
+            <a class="logout-btn" id="logout-btn">Logout</a>
         </div>
     </div>
     <div class="container">
@@ -66,12 +68,21 @@
             console.log(data);
             localStorage.setItem('access_token', data.access_token);
             localStorage.setItem('refresh_token', data.refresh_token);
+            location.href="./chat.html";
 
         })
         .catch(error => {
             console.error(error);
         });
     });
+
+    const logout = document.querySelector('#logout-btn');
+        logout.addEventListener('click', async function() {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            alert('로그아웃되었습니다.');
+            location.href="./login.html";
+        });
     </script>
 </body>
 </html> 

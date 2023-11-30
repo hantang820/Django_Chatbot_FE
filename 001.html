@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/common.css" />
+    <!-- 필요하다면 추가적인 스타일시트를 추가하세요 -->
+    <title>AI와 채팅하기</title>
+</head>
+
+<body>
+    <div class="header">
+        <span class="header-title">AboutMe</span>
+        <div>
+            <a class="chat-btn" href="chat.html">Chat</a>
+            <a class="login-btn" href="login.html">Login</a>
+            <a class="signup-btn" href="signup.html">Sign Up</a>
+            <a class="logout-btn" id="logout-btn">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <h2>AI와 채팅하기</h2>
+        <div id="chat-container">
+            <!-- 채팅 메시지가 여기에 표시됩니다 -->
+        </div>
+        <div class="form-group">
+            <label for="user-input">당신의 메시지:</label>
+            <input type="text" id="user-input" required>
+            <button id="send-btn">보내기</button>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+    
+        // 채팅 컨테이너에 메시지를 추가하는 함수
+        function addMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            chatContainer.appendChild(messageElement);
+        }
+    
+        // 보내기 버튼의 이벤트 리스너
+        sendBtn.addEventListener('click', async () => {
+            const userMessage = userInput.value;
+            addMessage('You', userMessage);
+    
+            // 사용자의 메시지를 서버로 보내고 AI의 응답을 받습니다
+            try {
+                const response = await fetch('http://127.0.0.1:8000/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                    },
+                    body: JSON.stringify({ prompt: userMessage }),
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    const aiResponse = data.response;
+                    addMessage('AI', aiResponse);
+                } else {
+                    console.error(`에러 발생: ${response.status} - ${response.statusText}`);
+                    throw new Error('AI 응답을 가져오는 데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('에러 발생:', error);
+            }
+    
+            // 사용자 입력 필드를 지웁니다
+            userInput.value = '';
+        });
+    
+        // 로그아웃 버튼의 이벤트 리스너
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            alert('로그아웃 성공적으로 완료되었습니다.');
+            location.href = './login.html';
+        });
+    </script>
+</body>
+</html>

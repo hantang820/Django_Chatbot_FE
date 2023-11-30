@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/common.css" />
+    <link rel="stylesheet" href="./css/chat.css" />
+    <title>Login</title>
+</head>
+
+<body>
+    <div class="header">
+        <span class="header-title">AboutMe</span>
+        <div>
+            <a class="chat-btn" href="chat.html">Chat</a>
+            <a class="login-btn" href="login.html">Login</a>
+            <a class="signup-btn" href="signup.html">Sign Up</a>
+            <a class="logout-btn" id="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <!-- 채팅 -->
+        <div class="chat-screen" id="chat-screen">
+            <p class="chat-info">ChatGPT에게 질문을 해보세요!</p>
+            <div class="ai-chat" id="ai-chat">
+                <div class="chat-wrap">
+                    <div class="chat-content">
+                        <p>반갑습니다. 어떤 것을 도와드릴까요?</p>
+                    </div>
+                </div>
+                
+            </div>
+                <form class="chat-form" id="chatbot_form">
+                        <textarea name="chat-input" id="chat-input" placeholder="개발자 이력서에 들어갈 자기소개서를 500자 내외로 작성해줘."></textarea>
+                        <button class="chat-input-button" type="submit" >전송</button>
+                </form>
+        </div>
+    </div>
+
+
+    <script>
+
+    const logout = document.querySelector('#logout-btn');
+        logout.addEventListener('click', async function() {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            alert('로그아웃되었습니다.');
+            location.href="./login.html";
+        });
+    </script>
+</body>
+</html> 
