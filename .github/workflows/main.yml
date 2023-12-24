@@ -24,9 +24,10 @@ jobs:
         BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME}}
       run: |
         aws s3 cp --recursive --region ap-northeast-2 . s3://$BUCKET_NAME
-    - name: Upload files to S3
+    - name: Upload files to CloudFront
       env:
         BUCKET_NAME: ${{ secrets.CLOUD_FRONT_ID}}
       run: |
-        aws cloudfront create-invalidation --distribution-id $CLOUD_FRONT_ID --paths "/*"
+        aws cloudfront create-invalidation \
+          --distribution-id $CLOUD_FRONT_ID --paths "/*"
 
